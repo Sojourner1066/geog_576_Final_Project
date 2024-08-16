@@ -76,9 +76,6 @@
           position: "top-left"
         });
 
-        // zoom map to current location on startup
-        locateBtn.locate();
-
         // Add a search widge so users can look up places
         const searchWidget = new Search({
           view: view
@@ -113,7 +110,9 @@
         view: view,
         layerInfos: [{ layer: dispensaries, title: "Medical Facilities" }]
       });
-      view.ui.add(legend, "bottom-right"); 
+      view.ui.add(legend, "bottom-right");
+      // zoom map to current location on startup
+      locateBtn.locate();
       });
     </script>
 
