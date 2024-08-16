@@ -111,8 +111,9 @@
         layerInfos: [{ layer: dispensaries, title: "Medical Facilities" }]
       });
       view.ui.add(legend, "bottom-right");
+
       // zoom map to current location on startup
-      locateBtn.locate();
+      view.when(locateBtn.locate());      
       });
     </script>
 
