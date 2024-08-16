@@ -93,7 +93,7 @@
       
       
       // add the same layer without clustering to allow users to see all the data about the objects at larger scales
-      const touristOSMinAfrica = new FeatureLayer({
+      const dispensaries = new FeatureLayer({
         url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Dispensary/FeatureServer/0",
         // outFields: ["addr_city", "addr_country", "addr_housenumber", "addr_postcode", "addr_street", "addr_unit",
         //             "amenity", "attraction", "description", "historic", "information", "name", "name_en", 
@@ -101,14 +101,14 @@
         // popupTemplate: popupOSM,
         
       });
-      map.add(touristOSMinAfrica);
+      map.add(dispensaries);
       
       // Add a legend showing both the clusters and the points
-      // const legend = new Legend({
-      //   view: view,
-      //   layerInfos: [{ layer: clusteredTourist, title: "Tourist Points of Interest" },{ layer: touristOSMinAfrica, title: "Tourist Points of Interest" }]
-      // });
-      // view.ui.add(legend, "bottom-right");       
+      const legend = new Legend({
+        view: view,
+        layerInfos: [{ layer: dispensaries, title: "Medical Facilities" }]
+      });
+      view.ui.add(legend, "bottom-right");       
       });
     </script>
 
