@@ -50,7 +50,8 @@
              ],(esriConfig, Map, MapView, Locate, Search, FeatureLayer,Legend,FeatureReductionCluster) => {
         
         // connect to API key. To adjust what services are connected to this key manage them via ArcGIS Online
-        esriConfig.apiKey = "AAPK81b7cca05fd44c15a03618aa1d5dd08bZ1H0FAlNGuWt3LBhlRWCK906HeAPjeUnUsp30Hja37HR_MwAO3BPqQO2D-rMlJTE"
+        // esriConfig.apiKey = "AAPK81b7cca05fd44c15a03618aa1d5dd08bZ1H0FAlNGuWt3LBhlRWCK906HeAPjeUnUsp30Hja37HR_MwAO3BPqQO2D-rMlJTE"
+        esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurKNQ8Ppnc1g03K1ODDn_lQoEdU_I_W8YuPOmi5tILMRTTD_3Em9igjMvGyB4-SFQTOnmhZKh-Vv9j4ljBhAn4M03AHNklRKIpNLO2DvGdpsu7oyF3P-qMmsLYeTumY6jniiVaBXzrWYKeQPVAvVFcxh3bhvFQmjt3TuWVlrUNdVIKT4CUxnF2QTP6doVBJvOjdOmD7GK2K6K_C8hP_q0tVx25XOAbGs3qkM-otbsTkXCAT1_kDvGl9f7"
         
         // create a map object with a basemap
         const map = new Map({
@@ -94,6 +95,7 @@
       
       // add the same layer without clustering to allow users to see all the data about the objects at larger scales
       const dispensaries = new FeatureLayer({
+        // https://services-eu1.arcgis.com/zci5bUiJ8olAal7N/ArcGIS/rest/services/Dispensary/FeatureServer/0
         url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Dispensary/FeatureServer/0",
         // outFields: ["addr_city", "addr_country", "addr_housenumber", "addr_postcode", "addr_street", "addr_unit",
         //             "amenity", "attraction", "description", "historic", "information", "name", "name_en", 
