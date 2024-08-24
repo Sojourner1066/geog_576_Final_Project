@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+ <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+   
+    <title>Vaccine Survey Tool</title>
+    <style>
+      html,
+      body,
+      #viewDiv {
+       padding: 0;
+       margin: 0;
+       height: 100%;
+       width: 100%;
+      }
+      .addRecordBtn {
+        position: absolute;
+        z-index: 10;
+        top: 10px;
+        right: 10px;
+        background-color: #0079c1;
+        color: white;
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      .addRecordBtn:hover {
+        background-color: #005a87;
+      }
+     </style>
+
+    <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.26/"></script>
+
+    <script>
+      // Load the required esri widgets for creating a webmap
+      require(["esri/config",
+               "esri/Map",
+               "esri/views/MapView",
+               "esri/widgets/Locate",
+               "esri/widgets/Search",
+               "esri/layers/FeatureLayer",
+               "esri/widgets/Legend",
+               "esri/widgets/Editor",
+               "esri/popup/content/AttachmentsContent",
+               "esri/popup/content/TextContent",
+               "esri/widgets/Expand",
+               "esri/core/reactiveUtils"
+              //  "esri/layers/support/FeatureReductionCluster"
+             ],(esriConfig, Map, MapView, Locate, Search, FeatureLayer, Legend, Editor, AttachmentsContent, TextContent, Expand, reactiveUtils) => {
+        
+        // connect to API key. To adjust what services are connected to this key manage them via ArcGIS Online
+        esriConfig.apiKey = "AAPK81b7cca05fd44c15a03618aa1d5dd08bZ1H0FAlNGuWt3LBhlRWCK906HeAPjeUnUsp30Hja37HR_MwAO3BPqQO2D-rMlJTE"
+        // esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurKNQ8Ppnc1g03K1ODDn_lQoEdU_I_W8YuPOmi5tILMRTZ-9MFqHIOLH9TD5VkTnI5iJRt-gBND9gB9f61FBfS5tzAgcuRWNSeyPxmUqo1rVmsSkXwc7DiQACAp3GJNGOnWxOo5DfNQMPRvCKVpoQIN7kp9vQWcG56oVEG0TeRxWJOFT0QtI-_wFCXhnwtZ89uVIzEIbHCOBThAQvnJeMF8VU66-36aezx2gz7_Fa6V25AT1_kDvGl9f7"
+        
+        // create a map object with a basemap
+        const map = new Map({
+          basemap: "streets-vector"
+        });
+        let editor, features;
+
+        const editThisAction = {
+          title: "Edit feature",
+          id: "edit-this",
+          className: "esri-icon-edit"
+        };
+
+        // Create a popupTemplate for the featurelayer and pass in a function to set its content and specify an action to handle editing the selected feature
+        const template = {
+          title: "Despensary Name {Facility_n}",
+          content: difficultyLevel,
+          fieldInfos: [
+            {
+              fieldName: "Facility_n"
+            },
+            {
+              fieldName: "Survey_Status"
+            }
+          ],
+          actions: [editThisAction]
+        };
+        // create a mapview with a center on Africa and zoom to see most of the land mass
+        const view = new MapView({
+          map: map,// References the map object
+          center: [35.714843501, -3.357520155],  // Longitude, latitude
+          zoom: 5, // Zoom level
+          container: "viewDiv" // Reference to the DOM node that will contain the view
+        });
+        
+        // Add a Locate widget so users can zoom to the location of their device
+        const locateBtn = new Locate({
+          view: view
+        });
+
+        // Add the locate widget to the top left corner of the view
+        view.ui.add(locateBtn, {
+          position: "top-left"
+        });
+
+        // Add a search widge so users can look up places
+        const searchWidget = new Search({
+          view: view
+        });
+        // Adds the search widget below other elements
+        view.ui.add(searchWidget, {
+          position: "bottom-left",
+          index: 2
+        });
+
+        // Define a pop-up for OpenStreetMap tourist data
+      // const popupOSM = {
+      //   "title": "Tourist Locations",
+      //   "content": "<b>Name:</b>{name} / {name_en}<br><b>Address:</b>{addr_street}<br>{addr_housenumber}<br>{addr_unit}<br>{addr_city}<br>{addr_postcode}<br>{addr_country}<br><b>Opening Hours:</b>{opening_hours}<br>"
+      // }
+      
+      
+      // add the same layer without clustering to allow users to see all the data about the objects at larger scales
+      const dispensaries = new FeatureLayer({
+        // https://services-eu1.arcgis.com/zci5bUiJ8olAal7N/ArcGIS/rest/services/Dispensary/FeatureServer/0
+        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Dispensary/FeatureServer/0",
+        // outFields: ["addr_city", "addr_country", "addr_housenumber", "addr_postcode", "addr_street", "addr_unit",
+        //             "amenity", "attraction", "description", "historic", "information", "name", "name_en", 
+        //             "opening_hours", "operator", "phone", "tourism", "website"],
+        // popupTemplate: popupOSM,
+        
+      });
+      map.add(dispensaries);
+      
+      // Add a legend showing both the clusters and the points
+      const legend = new Legend({
+        view: view,
+        layerInfos: [{ layer: dispensaries, title: "Medical Facilities" }]
+      });
+      view.ui.add(legend, "bottom-right");
+
+      // zoom map to current location on startup
+      view.when(locateBtn.locate());      
+      });
+    </script>
+
+  </head>
+  <body>
+    <div id="viewDiv"></div>
+    <!-- <a href="data_collection.html"target="_blank" class="addRecordBtn">View or Create an Event</a> -->
+  </body>
+</html>
