@@ -103,7 +103,8 @@
                 });
               });
               
-              const closestFacilityUrl = 'https://route-api.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World/solveClosestFacility';
+              //const closestFacilityUrl = 'https://route-api.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World/solveClosestFacility';
+              const closestFacilityUrl = "https://route-api.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World/solveClosestFacility";
 
               function findClosestFacility(startFeature) {
 
@@ -119,8 +120,8 @@
                 closestFacilityTask.solve(params).then(
                   (results) => {                    
                     showRoutes(results.routes);
-                    //console.info(results.routes.map(route=>route.toJSON()));
-                    console.info(results.routes.map(route=>route.attributes));
+                    console.info(results.routes.map(route=>route.toJSON()));
+                    //console.info(results.routes.map(route=>route.attributes));
                   },
                   (error) => {
                     console.error(error.details);
