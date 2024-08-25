@@ -67,7 +67,8 @@
               let featuresetFacilities = null;
 
               const facilitiesFeatureLayer = new FeatureLayer({
-                url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Dispensary/FeatureServer/0"
+                url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Dispensary/FeatureServer/0",
+                outFields: ["Admin1"]
               });
                                 
               let map = new Map({
