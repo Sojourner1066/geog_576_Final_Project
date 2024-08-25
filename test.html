@@ -89,7 +89,7 @@
                 // WAIT FOR FEATURE LAYER TO BE LAODED // 
                 facilitiesFeatureLayer.load().then(async () => {
                   // RETRIEVE ALL FACILITIES //
-                  featuresetFacilities = await facilitiesFeatureLayer.queryFeatures();
+                  featuresetFacilities = await facilitiesFeatureLayer.queryFeatures({where: "Admin1 = 'Bomet'"});
                   // INITIAL SOLVE // 
                   findClosestFacility(addStartGraphic(view.center));
                 });
