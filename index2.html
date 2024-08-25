@@ -131,7 +131,7 @@
         }
 
       });
-      // map.add(clusteredDispensary);
+      map.add(clusteredDispensary);
       
       // add the same layer without clustering to allow users to see all the data about the objects at larger scales
       const dispensaries = new FeatureLayer({
@@ -140,8 +140,8 @@
         //             "amenity", "attraction", "description", "historic", "information", "name", "name_en", 
         //             "opening_hours", "operator", "phone", "tourism", "website"],
         // popupTemplate: popupOSM,
-        minScale: 10000,
-        maxScale: 0,
+        minScale: 100000,
+        //maxScale: 0,
         
       });
       map.add(dispensaries);
