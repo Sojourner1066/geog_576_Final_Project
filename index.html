@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
    
-    <title>Vaccine Survey Tool</title>
+    <title>Social Media Influencer Research Tool</title>
     <style>
       html,
       body,
@@ -47,11 +47,10 @@
                "esri/layers/FeatureLayer",
                "esri/widgets/Legend",
                "esri/layers/support/FeatureReductionCluster"
-             ],(esriConfig, Map, MapView, Locate, Search, FeatureLayer,Legend,FeatureReductionCluster,closestFacility) => {
+             ],(esriConfig, Map, MapView, Locate, Search, FeatureLayer,Legend,FeatureReductionCluster) => {
         
         // connect to API key. To adjust what services are connected to this key manage them via ArcGIS Online
         esriConfig.apiKey = "AAPK81b7cca05fd44c15a03618aa1d5dd08bZ1H0FAlNGuWt3LBhlRWCK906HeAPjeUnUsp30Hja37HR_MwAO3BPqQO2D-rMlJTE"
-        // esriConfig.apiKey = "AAPTxy8BH1VEsoebNVZXo8HurKNQ8Ppnc1g03K1ODDn_lQoEdU_I_W8YuPOmi5tILMRTZ-9MFqHIOLH9TD5VkTnI5iJRt-gBND9gB9f61FBfS5tzAgcuRWNSeyPxmUqo1rVmsSkXwc7DiQACAp3GJNGOnWxOo5DfNQMPRvCKVpoQIN7kp9vQWcG56oVEG0TeRxWJOFT0QtI-_wFCXhnwtZ89uVIzEIbHCOBThAQvnJeMF8VU66-36aezx2gz7_Fa6V25AT1_kDvGl9f7"
         
         // create a map object with a basemap
         const map = new Map({
@@ -87,20 +86,62 @@
         });
 
         // Define a pop-up for OpenStreetMap tourist data
-      // const popupOSM = {
-      //   "title": "Tourist Locations",
-      //   "content": "<b>Name:</b>{name} / {name_en}<br><b>Address:</b>{addr_street}<br>{addr_housenumber}<br>{addr_unit}<br>{addr_city}<br>{addr_postcode}<br>{addr_country}<br><b>Opening Hours:</b>{opening_hours}<br>"
-      // }
-      
+      const popupOSM = {
+        "title": "Tourist Locations",
+        "content": "<b>Name:</b>{name} / {name_en}<br><b>Address:</b>{addr_street}<br>{addr_housenumber}<br>{addr_unit}<br>{addr_city}<br>{addr_postcode}<br>{addr_country}<br><b>Opening Hours:</b>{opening_hours}<br>"
+      }
+      // Create new feature layer object using clustering to reduse the number of points shown. 
+      const clusteredDispensary = new FeatureLayer({
+        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Dispensary/FeatureServer/0",
+        // set the scale when the culstered layer will turn on and off
+        minScale: 0,
+        maxScale: 100000,
+        // use featureReduction to limit the number of points and to have a popup that shows the count of points
+        featureReduction: {
+          type: "cluster",
+          clusterRadius: "120px", // Adjust the cluster radius as needed
+          popupTemplate: {
+            title: "Cluster Summary",
+            content: "This cluster contains <b>{cluster_count}</b> dispensary points of interest. Zoom in to see more detail.",
+          },
+          symbol: {
+            type: "simple-marker",
+            style: "circle",
+            color: "#69dcff",
+            outline: {
+              color: "rgba(0, 139, 174, 0.5)",
+              width: 6
+            }
+          },
+          labelingInfo: [
+            {
+              deconflictionStrategy: "none",
+              labelExpressionInfo: {
+                expression: "Text($feature.cluster_count, '#,###')"
+              },
+              symbol: {
+                type: "text",
+                color: "white",
+                haloSize: 1,
+                haloColor: "black"
+              },
+              labelPlacement: "center-center"
+            }
+          ]
+        }
+
+      });
+      map.add(clusteredDispensary);
       
       // add the same layer without clustering to allow users to see all the data about the objects at larger scales
       const dispensaries = new FeatureLayer({
-        // https://services-eu1.arcgis.com/zci5bUiJ8olAal7N/ArcGIS/rest/services/Dispensary/FeatureServer/0
         url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Dispensary/FeatureServer/0",
         // outFields: ["addr_city", "addr_country", "addr_housenumber", "addr_postcode", "addr_street", "addr_unit",
         //             "amenity", "attraction", "description", "historic", "information", "name", "name_en", 
         //             "opening_hours", "operator", "phone", "tourism", "website"],
         // popupTemplate: popupOSM,
+        minScale: 100000,
+        //maxScale: 0,
         
       });
       map.add(dispensaries);
@@ -108,18 +149,15 @@
       // Add a legend showing both the clusters and the points
       const legend = new Legend({
         view: view,
-        layerInfos: [{ layer: dispensaries, title: "Medical Facilities" }]
+        layerInfos: [{ layer: clusteredDispensary, title: "Dispensary locations of Interest" },{ layer: dispensaries, title: "Dispensaries Points of Interest" }]
       });
-      view.ui.add(legend, "bottom-right");
-
-      // zoom map to current location on startup
-      view.when(locateBtn.locate());      
+      view.ui.add(legend, "bottom-right");       
       });
     </script>
 
   </head>
   <body>
     <div id="viewDiv"></div>
-    <!-- <a href="data_collection.html"target="_blank" class="addRecordBtn">View or Create an Event</a> -->
+    <a href="https://arcg.is/WCz513"target="_blank" class="addRecordBtn">Open Survey</a>
   </body>
 </html>
