@@ -66,14 +66,16 @@
               const routesLayer = new GraphicsLayer();                
               let featuresetFacilities = null;
 
-              const facilitiesFeatureLayer = new FeatureLayer({
+              // const facilitiesFeatureLayer = new FeatureLayer({
+              const newLayer = new FeatureLayer({
                 url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Dispensary/FeatureServer/0",
                 outFields: ["*"]
               });
                                 
               let map = new Map({
                 basemap: "arcgis-streets",
-                layers: [routesLayer, facilitiesFeatureLayer],
+                // layers: [routesLayer, facilitiesFeatureLayer],
+                layers: [routesLayer, newLayer]
               });
 
               let view = new MapView({
@@ -88,9 +90,11 @@
               view.popup.actions = [];
               view.when(() => {                          
                 // WAIT FOR FEATURE LAYER TO BE LAODED // 
-                facilitiesFeatureLayer.load().then(async () => {
+                // facilitiesFeatureLayer.load().then(async () => {
+                  newLayer.load().then(async () => {
                   // RETRIEVE ALL FACILITIES //
-                  featuresetFacilities = await facilitiesFeatureLayer.queryFeatures({where: "Admin1 = 'Bomet'"});
+                  // featuresetFacilities = await facilitiesFeatureLayer.queryFeatures({where: "Admin1 = 'Bomet'"});
+                  featuresetFacilities = await newLayer.queryFeatures();
                   // INITIAL SOLVE // 
                   findClosestFacility(addStartGraphic(view.center));
                 });
@@ -104,7 +108,6 @@
                 });
               });
               
-              //const closestFacilityUrl = 'https://route-api.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World/solveClosestFacility';
               const closestFacilityUrl = "https://route-api.arcgis.com/arcgis/rest/services/World/ClosestFacility/NAServer/ClosestFacility_World/solveClosestFacility";
 
               function findClosestFacility(startFeature) {
