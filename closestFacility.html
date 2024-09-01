@@ -38,7 +38,7 @@
                 MapView,
                 Graphic,
                 GraphicsLayer,
-                // ClosestFacilityTask,
+                ClosestFacilityTask,
                 ClosestFacilityParameters,
                 FeatureSet,
                 Point,
@@ -123,9 +123,9 @@
                   defaultTargetFacilityCount: 3,
                 });                    
 
-                // const closestFacilityTask = new ClosestFacilityTask({url: closestFacilityUrl});
-                const closestFacilityTest = new closestFacility({url: closestFacilityUrl});
-                closestFacilityTest.solve(params).then(
+                const closestFacilityTask = new ClosestFacilityTask({url: closestFacilityUrl});
+                // const closestFacilityTest = new closestFacility({url: closestFacilityUrl});
+                closestFacilityTask.solve(params).then(
                   (results) => {                    
                     showRoutes(results.routes);
                     console.info(results.routes.map(route=>route.toJSON()));
