@@ -71,7 +71,8 @@
 
               // const facilitiesFeatureLayer = new FeatureLayer({
               const newLayer = new FeatureLayer({
-                url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Dispensary/FeatureServer/0",
+                url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Dispensary_view_100_points/FeatureServer",
+                // url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/Dispensary/FeatureServer/0",
                 outFields: ["*"]
               });
                                 
@@ -84,7 +85,7 @@
               let view = new MapView({
                 container: "viewDiv",
                 map: map,
-                center: [35.714843501, -3.357520155],
+                center: [37.320024, -0.568267],
                 zoom: 5,
                 constraints: {
                   snapToZoom: false
